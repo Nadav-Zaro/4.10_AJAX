@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 6 -->
+    <!-- <button type="button" onclick="loadDoc()">Request data</button>
+
+    <!-- 7 -->
+    <!-- <button type="button" onclick="loadDoc()">Request data</button>
+    <p id="load"></p>
+    <ul id="list"></ul> -->
+
+    <!-- 8 -->
+    <!-- <button type="button" onclick="loadDoc()">Request data</button> -->
+
+    <!-- 9 -->
+    <button type="button" onclick="loadDoc()">Request data</button>
+    <p id="load"></p>
+    <div id="shortLong"></div>
+    <div id="list"></div>
+    <p id="total"></p>
+
+    <script>
+        //---6---
+        //    function loadDoc(){
+        //        const xhttp = new XMLHttpRequest();
+        //        xhttp.onreadystatechange = function(){
+        //            if (this.readyState === 4 && this.status ===200) {
+        //                let obj = JSON.parse(this.responseText);
+        //                for (const element of obj) {
+        //                    console.log(element.title);
+        //                    console.log(element.userId);
+        //                }
+        //            }
+        //        };
+        //        xhttp.open("GET" , "https://jsonplaceholder.typicode.com/posts");
+        //        xhttp.send();
+        //    } 
+
+        //---7---
+        // function loadDoc() {
+        //     const xhttp = new XMLHttpRequest();
+        //     xhttp.onreadystatechange = function () {
+        //         document.getElementById("load").innerHTML = "Loading...";
+        //         if (this.readyState === 4 && this.status === 200) {
+        //         document.getElementById("load").innerHTML = "";
+        //             let obj = JSON.parse(this.responseText);
+        //             for (const element of obj) {
+        //                 document.getElementById("list").innerHTML += `<li>title: ${element.title}</li>
+        //                 <li>userId: ${element.userId}</li>`
+
+        //             }
+        //         }
+        //     };
+        //     xhttp.open("GET", "https://jsonplaceholder.typicode.com/posts");
+        //     xhttp.send();
+        // }
+
+        //---8---
+        // function loadDoc() {
+        //     const xhttp = new XMLHttpRequest();
+        //     xhttp.onreadystatechange = function () {
+        //         if (this.readyState === 4 && this.status === 200) {
+        //             let obj = JSON.parse(this.responseText);
+        //             for (const element of obj) {
+        //                 console.log(element.title);
+        //                 console.log(element.id);
+        //                 console.log(element.completed);
+        //             }
+        //         }
+        //     };
+        //     xhttp.open("GET", "https://jsonplaceholder.typicode.com/todos");
+        //     xhttp.send();
+        // }
+
+        // ---9---
+        function loadDoc() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                document.getElementById("load").innerHTML = "Loading...";
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById("load").innerHTML = "";
+                    let obj = JSON.parse(this.responseText);
+                    let min =0
+                    let minStr = obj[0].title;
+                    let minid;
+                    let minCom;
+                    let maxStr = obj[0].title;
+                    let max = 0;
+                    let maxId;
+                    let maxCom;
+                    let length = 0;
+                    
+                    for (const element of obj) {
+                        document.getElementById("list").innerHTML += `
+                        <ul id="${element.id}" onclick="deleteObj(${element.id})">
+                            <li style="border-top:1px solid black;">title: ${element.title}</li>
+                            <li>id: ${element.id}</li>
+                            <li>completed: ${element.completed}</li>
+                            </ul>`;
+                        if (maxStr.length < element.title.length) {
+                            maxStr = element.title;
+                            max = element.title.length;
+                            maxId = element.id;
+                            maxCom = element.completed;
+                        }
+                        if (minStr.length > element.title.length) {
+                            minStr = element.title;
+                            min = element.title.length;
+                            minId = element.id;
+                            minCom = element.completed;
+                        }
+                    }
+
+                    document.getElementById("shortLong").innerHTML = `<h1>Max-length</h1>
+                    <p>title: ${maxStr}</p><p>id: ${maxId}</p><p>completed: ${maxCom}</p>
+                    <p>Length: ${max} char's</p><br>
+                    <h1>Min-length</h1>
+                    <p>title: ${minStr}</p><p>id: ${minId}</p><p>completed: ${minCom}</p>
+                    <p>Length: ${min} char's</p>`
+
+                    document.getElementById("total").innerHTML = `Array length: ${obj.length}`
+                    deleteObj = (id) => {
+                        obj.forEach((element,i) => {
+                            if (element.id === id) {
+                                document.getElementById(id).innerHTML = "";
+                                obj.splice(i,1);
+                                document.getElementById("total").innerHTML = `Array length: ${obj.length}`
+                            }
+                        });
+                    }
+                }
+            };
+            xhttp.open("GET", "https://jsonplaceholder.typicode.com/todos");
+            xhttp.send();
+        }
+
+    </script>
+</body>
+
+</html>
